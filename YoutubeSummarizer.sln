@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{234E28D1-5B56-488C-A763-BA3E1401484A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSummarizer.Domain", "src\YoutubeSummarizer.Domain\YoutubeSummarizer.Domain.csproj", "{52E0EC74-A398-406D-84F9-A7F45A957F92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSummarizer.Application", "src\YoutubeSummarizer.Application\YoutubeSummarizer.Application.csproj", "{4052A11A-00EE-4CBB-8129-C762BCCEB68D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSummarizer.Infrastructure", "src\YoutubeSummarizer.Infrastructure\YoutubeSummarizer.Infrastructure.csproj", "{344B4E12-BA12-46E8-80D9-7FAFA39EBA58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSummarizer.API", "src\YoutubeSummarizer.API\YoutubeSummarizer.API.csproj", "{0E70CC75-3388-4B76-8D0B-35F19BF345C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSummarizer.Blazor", "src\YoutubeSummarizer.Blazor\YoutubeSummarizer.Blazor.csproj", "{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52E0EC74-A398-406D-84F9-A7F45A957F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52E0EC74-A398-406D-84F9-A7F45A957F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52E0EC74-A398-406D-84F9-A7F45A957F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52E0EC74-A398-406D-84F9-A7F45A957F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4052A11A-00EE-4CBB-8129-C762BCCEB68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4052A11A-00EE-4CBB-8129-C762BCCEB68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4052A11A-00EE-4CBB-8129-C762BCCEB68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4052A11A-00EE-4CBB-8129-C762BCCEB68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344B4E12-BA12-46E8-80D9-7FAFA39EBA58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344B4E12-BA12-46E8-80D9-7FAFA39EBA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344B4E12-BA12-46E8-80D9-7FAFA39EBA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344B4E12-BA12-46E8-80D9-7FAFA39EBA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E70CC75-3388-4B76-8D0B-35F19BF345C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E70CC75-3388-4B76-8D0B-35F19BF345C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E70CC75-3388-4B76-8D0B-35F19BF345C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E70CC75-3388-4B76-8D0B-35F19BF345C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52E0EC74-A398-406D-84F9-A7F45A957F92} = {234E28D1-5B56-488C-A763-BA3E1401484A}
+		{4052A11A-00EE-4CBB-8129-C762BCCEB68D} = {234E28D1-5B56-488C-A763-BA3E1401484A}
+		{344B4E12-BA12-46E8-80D9-7FAFA39EBA58} = {234E28D1-5B56-488C-A763-BA3E1401484A}
+		{0E70CC75-3388-4B76-8D0B-35F19BF345C7} = {234E28D1-5B56-488C-A763-BA3E1401484A}
+		{7E9903F8-7F7A-4CEE-B5B0-9608C573AE85} = {234E28D1-5B56-488C-A763-BA3E1401484A}
+	EndGlobalSection
+EndGlobal
