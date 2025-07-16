@@ -1,9 +1,10 @@
 ﻿@page "/"
+@inject HttpClient Http
+@inject ILogger<Index> Logger
 
 <PageTitle>YoutubeSummarizer</PageTitle>
 
 <div class="summarizer-container">
-    <!-- Floating background elements -->
     <div class="floating-element"></div>
     <div class="floating-element"></div>
     <div class="floating-element"></div>
@@ -14,34 +15,84 @@
         
         <div class="mb-4">
             <input 
-                type="url" 
+                type="text" 
                 class="form-control youtube-input" 
                 @bind="youtubeUrl" 
+                @bind:event="oninput"
                 placeholder="https://www.youtube.com/watch?v=..."
-                required />
+                required 
+                disabled="@isProcessing" />
         </div>
         
         <div class="d-grid">
             <button 
                 class="btn summarize-btn" 
-                @onclick="SummarizeVideo"
-                disabled="@string.IsNullOrWhiteSpace(youtubeUrl)">
-                Summarize
+                @onclick="SummarizeVideoAsync"
+                disabled="@(string.IsNullOrWhiteSpace(youtubeUrl) || isProcessing)">
+                @if (isProcessing)
+                {
+                    <span>Processing...</span>
+                }
+                else
+                {
+                    <span>Summarize</span>
+                }
             </button>
         </div>
+
+        @if (!string.IsNullOrEmpty(responseMessage))
+        {
+            <div class="mt-4 p-3 response-card">
+                <p class="mb-0">@responseMessage</p>
+            </div>
+        }
     </div>
 </div>
 
 @code {
     private string youtubeUrl = string.Empty;
+    private bool isProcessing;
+    private string responseMessage = string.Empty;
 
-    private void SummarizeVideo()
+    private async Task SummarizeVideoAsync()
     {
         if (string.IsNullOrWhiteSpace(youtubeUrl))
             return;
 
-        // TODO: Send request to API
-        // This will be implemented in the future
-        Console.WriteLine($"Summarizing video: {youtubeUrl}");
+        try
+        {
+            isProcessing = true;
+            responseMessage = string.Empty;
+
+            var request = new SummarizeRequest(youtubeUrl);
+            var response = await Http.PostAsJsonAsync("https://localhost:7289/api/summarize", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<SummarizeResponse>();
+                responseMessage = result?.Message ?? "No response message received.";
+            }
+            else
+            {
+                responseMessage = $"Error: {response.StatusCode} - {response.ReasonPhrase}";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Logger.LogError(ex, "HTTP request failed when calling summarize API");
+            responseMessage = "Error: Unable to connect to the server. Please try again.";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Unexpected error when calling summarize API");
+            responseMessage = "Error: An unexpected error occurred. Please try again.";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
     }
+
+    private record SummarizeRequest(string YouTubeUrl);
+    private record SummarizeResponse(string Message, string Status, string RequestId);
 }

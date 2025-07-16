@@ -1,6 +1,6 @@
 # YoutubeSummarizer
 
-A cursor test project.
+A cursor vibe coded test project.
 
 A .NET web application following Clean Architecture principles with a Web API backend and Blazor Server frontend.
 
