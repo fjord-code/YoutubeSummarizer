@@ -2,7 +2,46 @@
 
 <PageTitle>YoutubeSummarizer</PageTitle>
 
-<div class="container">
-    <h1>Welcome to YoutubeSummarizer</h1>
-    <p>Your application is ready for development.</p>
+<div class="summarizer-container">
+    <!-- Floating background elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <div class="summarizer-card">
+        <h1 class="summarizer-title">YouTube Video Summarizer</h1>
+        <p class="summarizer-description">Enter a YouTube video URL to get an AI-generated summary</p>
+        
+        <div class="mb-4">
+            <input 
+                type="url" 
+                class="form-control youtube-input" 
+                @bind="youtubeUrl" 
+                placeholder="https://www.youtube.com/watch?v=..."
+                required />
+        </div>
+        
+        <div class="d-grid">
+            <button 
+                class="btn summarize-btn" 
+                @onclick="SummarizeVideo"
+                disabled="@string.IsNullOrWhiteSpace(youtubeUrl)">
+                Summarize
+            </button>
+        </div>
+    </div>
 </div>
+
+@code {
+    private string youtubeUrl = string.Empty;
+
+    private void SummarizeVideo()
+    {
+        if (string.IsNullOrWhiteSpace(youtubeUrl))
+            return;
+
+        // TODO: Send request to API
+        // This will be implemented in the future
+        Console.WriteLine($"Summarizing video: {youtubeUrl}");
+    }
+}
