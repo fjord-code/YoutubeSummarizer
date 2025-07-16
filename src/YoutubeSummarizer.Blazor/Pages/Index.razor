@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject HttpClient Http
+@inject IHttpClientFactory HttpClientFactory
 @inject ILogger<Index> Logger
 
 <PageTitle>YoutubeSummarizer</PageTitle>
@@ -64,8 +64,9 @@
             isProcessing = true;
             responseMessage = string.Empty;
 
-            var request = new SummarizeRequest(youtubeUrl);
-            var response = await Http.PostAsJsonAsync("https://localhost:7289/api/summarize", request);
+            using var httpClient = HttpClientFactory.CreateClient("API");
+            var request = new SummarizeRequest { YouTubeUrl = youtubeUrl };
+            var response = await httpClient.PostAsJsonAsync("/api/summarize", request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -74,13 +75,14 @@
             }
             else
             {
-                responseMessage = $"Error: {response.StatusCode} - {response.ReasonPhrase}";
+                var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                responseMessage = errorResponse?.Error ?? $"Error: {response.StatusCode} - {response.ReasonPhrase}";
             }
         }
         catch (HttpRequestException ex)
         {
             Logger.LogError(ex, "HTTP request failed when calling summarize API");
-            responseMessage = "Error: Unable to connect to the server. Please try again.";
+            responseMessage = "Error: Unable to connect to the server. Please ensure the API is running and try again.";
         }
         catch (Exception ex)
         {
@@ -93,6 +95,24 @@
         }
     }
 
-    private record SummarizeRequest(string YouTubeUrl);
-    private record SummarizeResponse(string Message, string Status, string RequestId);
+    // DTOs for API communication
+    private class SummarizeRequest
+    {
+        public string YouTubeUrl { get; set; } = string.Empty;
+    }
+
+    private class SummarizeResponse
+    {
+        public string Message { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string RequestId { get; set; } = string.Empty;
+        public double ProcessingTimeMs { get; set; }
+    }
+
+    private class ErrorResponse
+    {
+        public string Error { get; set; } = string.Empty;
+        public string RequestId { get; set; } = string.Empty;
+        public DateTime Timestamp { get; set; }
+    }
 }

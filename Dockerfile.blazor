@@ -1,0 +1,40 @@
+# Multi-stage build for Blazor production
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Create non-root user for security
+RUN adduser --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy project files
+COPY ["src/YoutubeSummarizer.Blazor/YoutubeSummarizer.Blazor.csproj", "src/YoutubeSummarizer.Blazor/"]
+
+# Restore dependencies
+RUN dotnet restore "src/YoutubeSummarizer.Blazor/YoutubeSummarizer.Blazor.csproj"
+
+# Copy source code
+COPY . .
+
+# Build the application
+WORKDIR "/src/src/YoutubeSummarizer.Blazor"
+RUN dotnet build "YoutubeSummarizer.Blazor.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "YoutubeSummarizer.Blazor.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+
+# Copy published application
+COPY --from=publish /app/publish .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost/ || exit 1
+
+ENTRYPOINT ["dotnet", "YoutubeSummarizer.Blazor.dll"] 

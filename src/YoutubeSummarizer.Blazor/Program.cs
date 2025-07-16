@@ -5,7 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddHttpClient();
+
+// Configure HttpClient with API base URL
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:5001";
+builder.Services.AddHttpClient("API", client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
 
 var app = builder.Build();
 

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  youtube-summarizer-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: youtube-summarizer-api
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+    volumes:
+      - ./models:/app/models:ro
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - youtube-summarizer-network
+
+  youtube-summarizer-blazor:
+    build:
+      context: .
+      dockerfile: Dockerfile.blazor
+    container_name: youtube-summarizer-blazor
+    ports:
+      - "3000:80"
+      - "3001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+    depends_on:
+      youtube-summarizer-api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - youtube-summarizer-network
+
+networks:
+  youtube-summarizer-network:
+    driver: bridge
+
+volumes:
+  logs: 

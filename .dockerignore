@@ -1,16 +1,17 @@
-# .NET Core
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+
+# Build outputs
 bin/
 obj/
-*.user
-*.userosscache
-*.suo
-*.userprefs
-
-# Build results
 [Dd]ebug/
-[Dd]ebugPublic/
 [Rr]elease/
-[Rr]eleases/
 x64/
 x86/
 build/
@@ -18,9 +19,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Oo]ut/
-msbuild.log
-msbuild.err
-msbuild.wrn
 
 # Visual Studio
 .vs/
@@ -32,7 +30,6 @@ msbuild.wrn
 # ReSharper
 _ReSharper*/
 *.[Rr]e[Ss]harper
-*.DotSettings.user
 
 # NuGet
 *.nupkg
@@ -74,10 +71,17 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Custom project files
-*INI
+# Docker
+Dockerfile*
+.dockerignore
 
-# AI Models (large files)
+# AI Models (large files - exclude from build context)
 src/YoutubeSummarizer.API/models/*.gguf
 src/YoutubeSummarizer.API/models/*.bin
 src/YoutubeSummarizer.API/models/*.model
+
+# Test files
+**/*.Tests/
+**/*.Test/
+**/test/
+**/tests/ 

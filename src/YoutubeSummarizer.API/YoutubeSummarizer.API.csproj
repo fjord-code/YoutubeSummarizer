@@ -9,11 +9,22 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\YoutubeSummarizer.Application\YoutubeSummarizer.Application.csproj" />
     <ProjectReference Include="..\YoutubeSummarizer.Infrastructure\YoutubeSummarizer.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <!-- Copy models directory and all .gguf files to output -->
+  <ItemGroup>
+    <Content Include="models\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

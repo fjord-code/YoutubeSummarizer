@@ -5,6 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LLamaSharp" Version="0.24.0" />
+    <PackageReference Include="LLamaSharp.Backend.Cpu" Version="0.24.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
     <PackageReference Include="YoutubeExplode" Version="6.5.4" />
   </ItemGroup>
 
