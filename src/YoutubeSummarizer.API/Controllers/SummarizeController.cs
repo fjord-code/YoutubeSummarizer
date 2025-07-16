@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using YoutubeSummarizer.Domain.Interfaces;
 
 namespace YoutubeSummarizer.API.Controllers;
 
@@ -6,22 +7,50 @@ namespace YoutubeSummarizer.API.Controllers;
 [Route("api/[controller]")]
 public class SummarizeController : ControllerBase
 {
-    [HttpPost]
-    public IActionResult SummarizeVideo([FromBody] SummarizeRequest request)
+    private readonly IVideoTranscriptionService _transcriptionService;
+    private readonly ILogger<SummarizeController> _logger;
+    
+    public SummarizeController(IVideoTranscriptionService transcriptionService, ILogger<SummarizeController> logger)
     {
-        if (string.IsNullOrWhiteSpace(request.YouTubeUrl))
+        _transcriptionService = transcriptionService;
+        _logger = logger;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SummarizeVideo([FromBody] SummarizeRequest request, CancellationToken cancellationToken)
+    {
+        try
         {
-            return BadRequest(new { error = "YouTube URL is required" });
+            if (string.IsNullOrWhiteSpace(request.YouTubeUrl))
+            {
+                return BadRequest(new { error = "YouTube URL is required" });
+            }
+
+            var transcription = string.Empty;
+            transcription = await _transcriptionService.GetTranscriptionAsync(request.YouTubeUrl, cancellationToken);
+
+            _logger.LogInformation("Transcription: {Transcription}", transcription);
+
+            var response = new SummarizeResponse
+            {
+                Message = transcription,
+                Status = string.IsNullOrWhiteSpace(transcription) ? "NoTranscription" : "Success",
+                RequestId = Guid.NewGuid().ToString()
+            };
+
+            return Ok(response);
         }
-
-        var response = new SummarizeResponse
+        catch (Exception ex)
         {
-            Message = $"Got an url: {request.YouTubeUrl} at date time: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss UTC}. Started processing.",
-            Status = "Processing",
-            RequestId = Guid.NewGuid().ToString()
-        };
-
-        return Ok(response);
+            _logger.LogError(ex, "Failed to retrieve transcription for URL: {YouTubeUrl}", request.YouTubeUrl);
+            var errorResponse = new SummarizeResponse
+            {
+                Message = $"Failed to retrieve transcription: {ex.Message}",
+                Status = "Error",
+                RequestId = Guid.NewGuid().ToString()
+            };
+            return StatusCode(500, errorResponse);
+        }
     }
 }
 
